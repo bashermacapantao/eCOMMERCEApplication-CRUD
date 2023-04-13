@@ -1,0 +1,42 @@
+﻿@using eCOMMERCEApplication.Models
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Your Cart Order</h2>
+<table class="table table-bordered table-hover">
+    <tr>
+        <th>Product Image</th>
+        <th>Product Name</th>
+        <th>Product Price</th>
+        <th>Product Quantity</th>
+        <th>Product Amount</th>
+        <th>Operation</th>
+    </tr>
+    @foreach (var item in (List<Item>)Session["cart"])
+            {
+                <tr>
+                    <td>
+                        <img src="~/Content/Images/@item.Product.prod_pic" alt="@item.Product.prod_name" width="100" height="100" />
+                    </td>
+                    <td>@item.Product.prod_name</td>
+                    <td>@item.Product.prod_price</td>
+                    <td>@item.Quantity</td>
+                    <td><b>₱@(item.Product.prod_price * item.Quantity)</b></td>
+                    <td>
+                        <a href="@Url.Action("RemoveFromCart", "Cart", new { @ProductID = item.Product.prod_id})" class="btn btn-danger"> Remove </a>
+                    </td>
+                </tr>
+            }
+    <tr>
+        <td colspan="4"><h2 class="text-center">Total amount:</h2></td>
+        <td colspan="2">
+            @{ 
+                List<Item> cart = (List<Item>)Session["cart"];
+                var total = (from data in cart select data.Product.prod_price * data.Quantity).Sum();
+            }
+            <h2>₱@total</h2>
+        </td>
+    </tr>
+</table>
+
